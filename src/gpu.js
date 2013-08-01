@@ -1,3 +1,8 @@
+//
+// gpu.js - a gpgpu library in JavaScript
+//
+// Ian Webster, MIT License
+//
 
 ;function Gpu() {
   var me = this;
@@ -15,7 +20,8 @@
       console.error('gpu.js requires the OES_texture_float extension');
       return false;
     }
-
+  };
+  me.Run = function(data) {
     // from http://concord-consortium.github.io/lab/experiments/webgl-gpgpu/script.js
     gl = GL.create({ alpha: true });
 
@@ -42,9 +48,29 @@
     // all textures are created.
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
 
-    var data = new Float32Array(TEX_WIDTH * TEX_HEIGHT);
+    // Send data to gpu
+    var i, data, dataGPU;
+    data = new Float32Array(TEX_WIDTH * TEX_HEIGHT);
+    dataGPU = new Float32Array(TEX_WIDTH * TEX_HEIGHT * 4);
+    for (i=0, len = TEX_WIDTH * TEX_HEIGHT; i < len; i++) {
+      //data[i] = Math.random() * RANGE;
+      dataGPU[4 * i] = data[i];
+      dataGPU[4 * i + 1] = 0;
+      dataGPU[4 * i + 2] = 0;
+      dataGPU[4 * i + 3] = 0;
+    }
+
+    me.WriteTexture(textureA, dataGPU);
 
     return true;
   };
+
+  me.WriteTexture = function(tex, input) {
+    // Make sure that texture is bound.
+    gl.bindTexture(gl.TEXTURE_2D, tex.id);
+    gl.texImage2D(gl.TEXTURE_2D, 0, tex.format, tex.width, tex.height, 0, tex.format, tex.type, input);
+    gl.finish();
+  };
+
 
 };
