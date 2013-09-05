@@ -38,7 +38,9 @@
     console.info('gpu.js initialized');
   };
 
-  me.Run = function(data) {
+  me.Run = function(data, shaders) {
+    updateShader = new GL.Shader(shaders[0], shaders[1]);
+
     // from http://concord-consortium.github.io/lab/experiments/webgl-gpgpu/script.js
 
     gl.canvas.width = 512;
@@ -162,33 +164,6 @@
           gl_FragColor = vec4(texture2D(texture, coord).r / range, 0.0, 1.0 - texture2D(texture, coord).r / range, 1.0);\
         }\
       ');
-
-    // TODO let people write their own shaders
-    updateShader = new GL.Shader('\
-      varying vec2 coord;\
-      void main() {\
-        coord = gl_Vertex.xy * 0.5 + 0.5;\
-        gl_Position = vec4(gl_Vertex.xyz, 1.0);\
-      }\
-      ', '\
-        uniform sampler2D texture;\
-        uniform vec2 delta;\
-        varying vec2 coord;\
-        void main() {\
-          vec4 data = texture2D(texture, coord);\
-          /* calculate average neighbor value */\
-          vec2 dx = vec2(delta.x, 0.0);\
-          vec2 dy = vec2(0.0, delta.y);\
-          float average = (\
-            texture2D(texture, coord - dx).r +\
-            texture2D(texture, coord - dy).r +\
-            texture2D(texture, coord + dx).r +\
-            texture2D(texture, coord + dy).r\
-          ) * 0.25;\
-          data += (average - data.r) * 0.5;\
-          gl_FragColor = data;\
-        }\
-    ');
 
      // ========================================================================
      // The first method of encoding floats based on:
