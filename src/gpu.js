@@ -73,7 +73,7 @@
     data = new Float32Array(TEX_WIDTH * TEX_HEIGHT);
     dataGPU = new Float32Array(TEX_WIDTH * TEX_HEIGHT * 4);
     for (i=0, len = TEX_WIDTH * TEX_HEIGHT; i < len; i++) {
-      data[i] = Math.random() * RANGE;
+      //data[i] = Math.random() * RANGE;
       dataGPU[4 * i] = data[i];
       dataGPU[4 * i + 1] = 0;
       dataGPU[4 * i + 2] = 0;
@@ -95,6 +95,10 @@
     gl.texImage2D(gl.TEXTURE_2D, 0, tex.format, tex.width, tex.height, 0, tex.format, tex.type, input);
     gl.finish();
   };
+
+  me.MakeDataArray = fucntion() {
+    return new Float32Array(TEX_WIDTH * TEX_HEIGHT);
+  }
 
   function onDrawCallback() {
     if (!textureB) return;
