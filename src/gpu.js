@@ -18,10 +18,6 @@
 
   var outputConverted, outputTexture, outputStorage;
 
-  me.GetConvertedOutput = function() {
-    return outputConverted;
-  }
-
   me.Init = function() {
     if (typeof GL === 'undefined') {
       console.error('gpu.js depends on the LightGL library.');
@@ -98,6 +94,10 @@
 
   me.MakeDataArray = fucntion() {
     return new Float32Array(TEX_WIDTH * TEX_HEIGHT);
+  }
+
+  me.GetConvertedOutput = function() {
+    return outputConverted;
   }
 
   function onDrawCallback() {
