@@ -1,0 +1,19 @@
+
+<script src="http://rawgithub.com/3DRoberto/webclgl/master/WebCLGL_2.0/WebCLGLUtils.class.js"></script>
+<script src="http://rawgithub.com/3DRoberto/webclgl/master/WebCLGL_2.0/WebCLGLBuffer.class.js"></script>
+<script src="http://rawgithub.com/3DRoberto/webclgl/master/WebCLGL_2.0/WebCLGLKernel.class.js"></script>
+<script src="http://rawgithub.com/3DRoberto/webclgl/master/WebCLGL_2.0/WebCLGL.class.js"></script>
+
+<script src="../src/gpu2.js"></script>
+
+<script>
+var w = new GpuWorker();
+
+</script>
+
+<script type="shader" id="testshader">
+void main(float* A, float* B, float num) {
+  vec2 x = get_global_id();
+  out_float = A[x]+B[x]+num;
+}
+</script>
