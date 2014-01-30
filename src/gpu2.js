@@ -2,11 +2,10 @@
 ;function GpuWorker() {
 
   var me = this;
-  var webCLGL = new WebCLGL();
   var resultOffset = 0;
 
   me.prepare = function(id) {
-    return me.prepareString(document.getElementById(id));
+    return me.prepareString(document.getElementById(id).innerHTML);
   };
 
   me.setResultOffset = function(val) {
@@ -15,6 +14,7 @@
 
   me.prepareString  = function(glsl_str) {
     var length = -1;
+    var webCLGL = new WebCLGL();
 
     return function() {
       var args = arguments;
@@ -22,6 +22,8 @@
 
       for (var i=0; i < args.length; i++) {
         var arg = args[i];
+
+        console.log('eval arg', arg);
 
         if (Object.prototype.toString.call(arg) !== '[object Array]') {
 
@@ -48,7 +50,7 @@
         var min = Number.MAX_VALUE;
         var max = Number.MIN_VALUE;
 
-        if (typeof arg[0] == 'Number') {
+        if (typeof arg[0] === 'number') {
           // It's an array of floats
           for (var j=0; j < arg.length; j++) {
             var tmpj = arg[j];
@@ -78,7 +80,9 @@
         }
       }  // end for
 
+      console.log(glsl_str);
       var kernel_add = webCLGL.createKernel(glsl_str);
+      console.log(buffers);
       for (var i=0; i < args.length; i++) {
         kernel_add.setKernelArg(i, buffers[i]);
       }
@@ -89,7 +93,7 @@
       var buffer_ret = WebCLGL.createBuffer(length, 'FLOAT', resultOffset);
       webCLGL.enqueueNDRangeKernel(kernel_add, buffer_ret);
 
-      var result = webCLGL.enqueueReadBuffer_Float(buffer_C);
+      var result = webCLGL.enqueueReadBuffer_Float(buffer_ret);
       return result;
     };
   };

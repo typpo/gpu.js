@@ -6,14 +6,19 @@
 
 <script src="../src/gpu2.js"></script>
 
-<script>
-var w = new GpuWorker();
-
-</script>
-
 <script type="shader" id="testshader">
 void main(float* A, float* B, float num) {
   vec2 x = get_global_id();
   out_float = A[x]+B[x]+num;
 }
+</script>
+
+<script>
+var w = new GpuWorker();
+
+fn = w.prepare('testshader');
+
+var res = fn([1.0, 2.0, 3.0], [0.1, 0.2, 0.3]);
+document.write(res);
+
 </script>
