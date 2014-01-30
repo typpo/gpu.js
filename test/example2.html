@@ -7,9 +7,9 @@
 <script src="../src/gpu2.js"></script>
 
 <script type="shader" id="testshader">
-void main(float* A, float* B, float num) {
+void main(float* A, float* B) {
   vec2 x = get_global_id();
-  out_float = A[x]+B[x]+num;
+  out_float = A[x]+B[x];
 }
 </script>
 
