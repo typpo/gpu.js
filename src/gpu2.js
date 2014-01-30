@@ -23,8 +23,6 @@
       for (var i=0; i < args.length; i++) {
         var arg = args[i];
 
-        console.log('eval arg', arg);
-
         if (Object.prototype.toString.call(arg) !== '[object Array]') {
 
           if (typeof arg === 'Number') {
@@ -60,6 +58,7 @@
           offset = Math.max(Math.abs(min), Math.abs(max));
           buffers[i] = webCLGL.createBuffer(length, 'FLOAT', offset);
           webCLGL.enqueueWriteBuffer(buffers[i], arg);
+          console.log('queueing', arg);
 
         } else if (Object.prototype.toString.call(arg) === '[object Array]') {
           // It's an array of float4s, so flatten it and create a buffer
@@ -90,7 +89,7 @@
 
       // TODO get result, either an array of floats or an array of float4s
       // TODO Final offset can't really be predicted
-      var buffer_ret = WebCLGL.createBuffer(length, 'FLOAT', resultOffset);
+      var buffer_ret = webCLGL.createBuffer(length, 'FLOAT', resultOffset);
       webCLGL.enqueueNDRangeKernel(kernel_add, buffer_ret);
 
       var result = webCLGL.enqueueReadBuffer_Float(buffer_ret);

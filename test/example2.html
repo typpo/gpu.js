@@ -9,16 +9,19 @@
 <script type="shader" id="testshader">
 void main(float* A, float* B) {
   vec2 x = get_global_id();
-  out_float = A[x]+B[x];
+  out_float = A[x] + B[x];
 }
 </script>
 
 <script>
 var w = new GpuWorker();
 
+w.setResultOffset(5.0);
+
 fn = w.prepare('testshader');
 
-var res = fn([1.0, 2.0, 3.0], [0.1, 0.2, 0.3]);
+var res = fn([1.0, 2.0, 3.0, 4.0], [0.1, 0.2, 0.3, 0.4]);
+console.log(res);
 document.write(res);
 
 </script>
