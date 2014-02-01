@@ -4,7 +4,8 @@
   var me = this;
   var resultOffset = 0;
 
-  var pow2 = [4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096];
+  //var pow2 = [4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096];
+  var pow2 = [1, 4, 16, 64, 256, 1024];
 
   me.prepare = function(id) {
     return me.prepareString(document.getElementById(id).innerHTML);
@@ -41,7 +42,7 @@
         if (length < 0) {
           // Length requirement not set yet
           length = arg.length;
-          if (!isPow2(length) || length < 4) {
+          //if (!isPow2(length) || length < 4) {
             // Calculate amount of padding
             // need to pad if it's not a power of 2!  Or less than 4
             var nextPow2 = -1;
@@ -58,7 +59,7 @@
               console.error('Array arguments must be a power of 2 in length');
               return false;
             }
-          }
+          //}
         } else if (arg.length !== length) {
           console.error('Required length', length, 'but got', arg.length + pad);
           console.log('For arg:', arg);
@@ -84,7 +85,7 @@
             min = Math.min(tmpj, min);
             max = Math.max(tmpj, max);
           }
-          offset = Math.max(Math.abs(min), Math.abs(max));
+          offset = Math.max(Math.abs(min)-1, Math.abs(max)+1);
           buffers[i] = webCLGL.createBuffer(length, 'FLOAT', offset);
           webCLGL.enqueueWriteBuffer(buffers[i], arg);
           console.log('queueing', arg);
@@ -102,7 +103,7 @@
             max = Math.max(subarr, max);
             flat.concat(subarr);
           }
-          offset = Math.max(Math.abs(min), Math.abs(max));
+          offset = Math.max(Math.abs(min)-1, Math.abs(max)+1);
           buffers[i] = webCLGL.createBuffer(length, 'FLOAT4', offset);
           webCLGL.enqueueWriteBuffer(buffers[i], flat);
         }

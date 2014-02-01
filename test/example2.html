@@ -18,7 +18,7 @@ var w = new GpuWorker();
 
 w.setResultRange(0, 10);
 
-fn = w.prepare('testshader');
+var fn = w.prepare('testshader');
 
 var res = fn([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]);
 console.log(res);
