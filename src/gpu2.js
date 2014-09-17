@@ -28,13 +28,12 @@
         var arg = args[i];
 
         if (Object.prototype.toString.call(arg) !== '[object Array]') {
-
           if (typeof arg === 'Number') {
             // Special case.  It's a constant
             buffers[i] = arg;
             continue;
           } else {
-            console.error('Arguments must be array types');
+            console.error('Arguments must be numbers or array types');
             return false;
           }
         }
@@ -53,6 +52,7 @@
                 break;
               }
             }
+            pad = 0;
             if (pad < 0) {
               // Failed, maybe because this is a really long list
               // User is responsible for enforcing power of 2 now
@@ -89,7 +89,6 @@
           buffers[i] = webCLGL.createBuffer(length, 'FLOAT', offset);
           webCLGL.enqueueWriteBuffer(buffers[i], arg);
           console.log('queueing', arg);
-
         } else if (Object.prototype.toString.call(arg) === '[object Array]') {
           // It's an array of float4s, so flatten it and create a buffer
           var flat = [];
@@ -110,17 +109,21 @@
       }  // end for
 
       console.log(glsl_str);
-      var kernel_add = webCLGL.createKernel(glsl_str);
-      console.log(buffers);
+      var kernel = webCLGL.createKernel(glsl_str);
       for (var i=0; i < args.length; i++) {
-        kernel_add.setKernelArg(i, buffers[i]);
+        console.log('Setting', i, 'to', buffers[i].inData);
+        kernel.setKernelArg(i, buffers[i]);
       }
-      kernel_add.compile();
+      console.log('resultOffset', resultOffset);
+      /*
+      kernel.setKernelArg(0, [1.0, 1.0, 1.0]);
+      kernel.setKernelArg(1, [1.0, 1.0, 1.0]);
+      */
+      kernel.compile();
 
       // TODO get result, either an array of floats or an array of float4s
-      // TODO Final offset can't really be predicted
       var buffer_ret = webCLGL.createBuffer(length+pad, 'FLOAT', resultOffset);
-      webCLGL.enqueueNDRangeKernel(kernel_add, buffer_ret);
+      webCLGL.enqueueNDRangeKernel(kernel, buffer_ret);
 
       var result = webCLGL.enqueueReadBuffer_Float(buffer_ret);
       return result;

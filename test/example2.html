@@ -1,7 +1,7 @@
 
-<script src="https:/rawgit.com/stormcolor/webclgl/master/WebCLGLUtils.class.js"></script>
-<script src="https:/rawgit.com/stormcolor/webclgl/master/WebCLGLBuffer.class.js"></script>
-<script src="https:/rawgit.com/stormcolor/webclgl/master/WebCLGLKernel.class.js"></script>
+<script src="https://rawgit.com/stormcolor/webclgl/master/WebCLGLUtils.class.js"></script>
+<script src="https://rawgit.com/stormcolor/webclgl/master/WebCLGLBuffer.class.js"></script>
+<script src="https://rawgit.com/stormcolor/webclgl/master/WebCLGLKernel.class.js"></script>
 <script src="https://rawgit.com/stormcolor/webclgl/master/WebCLGL.class.js"></script>
 
 <script src="../src/gpu2.js"></script>
@@ -20,7 +20,8 @@ w.setResultRange(0, 10);
 
 var fn = w.prepare('testshader');
 
-var res = fn([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]);
+//var res = fn([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]);
+var res = fn([1.0, 2.0], [1.0, 2.0]);
 console.log(res);
 document.write(res.join('<br>'));
 
